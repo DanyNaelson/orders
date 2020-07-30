@@ -1,0 +1,39 @@
+{
+  "name": "menu-service-ostra",
+  "version": "1.0.0",
+  "description": "Menu service for the application La Ostra",
+  "main": "server/server.js",
+  "scripts": {
+    "dev": "nodemon server/server.js",
+    "start": "node server/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/woke-xyz/menu-service-ostra.git"
+  },
+  "keywords": [
+    "menu",
+    "service",
+    "ostra"
+  ],
+  "author": "La Ostra",
+  "license": "MIT License",
+  "bugs": {
+    "url": "https://github.com/woke-xyz/menu-service-ostra/issues"
+  },
+  "homepage": "https://github.com/woke-xyz/menu-service-ostra#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.26",
+    "mongoose-unique-validator": "^2.0.3",
+    "underscore": "^1.10.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
