@@ -24,14 +24,24 @@ let dishSchema = new Schema({
     picture: {
         type: String,
         required: false,
-        default: 'url_picture'
+        default: ''
     },
     category: {
-        type: String,
-        required: [true, 'category_required']
+        name: {
+            type: String,
+            required: [true, 'category_name_required']
+        },
+        nickname: {
+            type: String,
+            required: [true, 'category_nickname_required']
+        },
+        order: {
+            type: Number,
+            required: [true, 'category_order_required']
+        }
     },
     price: {
-        type: String,
+        type: Number,
         required: [true, 'price_required']
     },
     description: {
@@ -39,8 +49,12 @@ let dishSchema = new Schema({
         required: [true, 'description_required']
     },
     extra_ingredients: {
-        name: String,
-        quantity: Number
+        name: {
+            type: String
+        },
+        quantity: {
+            type: Number
+        }
     }
 })
 

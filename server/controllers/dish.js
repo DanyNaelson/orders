@@ -9,17 +9,26 @@ const Dish = require('../models/dish');
  * @param {*} res 
  */
 const getDishes = (req, res) => {
-    Dish.find({})
+    const query = req.query
+    const dish = query.hasOwnProperty('dish') ? query.dish : null
+    const category = query.hasOwnProperty('category') ? query.category : null
+    let parameters = {}
+
+    if(dish)
+        parameters.nickname = new RegExp(dish, "i")
+
+    if(category)
+        parameters["category.nickname"] = category
+
+    Dish.find(parameters)
         .exec((err, dishes) => {
             if(err)
                 return res.status(400).json({ ok: false, err });
 
-            Dish.countDocuments({}, (err, count) => {
-                res.json({
-                    ok: true,
-                    dishes,
-                    count
-                })
+            res.json({
+                ok: true,
+                dishes,
+                count: dishes.length
             })
 
         })
@@ -90,7 +99,7 @@ const getDishById = (req, res) => {
     const query = isObjectId ? { _id: id } : { nickname: id }
 
     Dish.findOne(query)
-        .exec((err, dish) => {console.log()
+        .exec((err, dish) => {
             if(err)
                 return res.status(400).json({ ok: false, err });
 

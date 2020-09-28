@@ -11,28 +11,28 @@ const {
 /**
  * Endpoint: API Dishes
  */
-app.get('/', (req, res) => {
+app.get(process.env.BASE_URL + '/', (req, res) => {
     res.send("API dishes")
 })
 
 /**
  * Endpoint: Get all dishes
  */
-app.get('/dishes', getDishes)
+app.get(process.env.BASE_URL + '/dishes', getDishes)
 
 /**
  * Endpoint: Create dish
  */
-app.post('/dish', [verifyToken], createDish)
+app.post(process.env.BASE_URL + '/dish', [verifyToken], createDish)
 
 /**
  * Endpoint: Get dish by id
  */
-app.get('/dish/:id', getDishById)
+app.get(process.env.BASE_URL + '/dish/:id', getDishById)
 
 /**
  * Endpoint: Update dish
  */
-app.put('/dish/:id', [verifyToken], updateDish)
+app.put(process.env.BASE_URL + '/dish/:id', [verifyToken], updateDish)
 
 module.exports = app;
