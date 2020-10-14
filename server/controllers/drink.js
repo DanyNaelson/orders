@@ -1,45 +1,45 @@
 const _ = require('underscore');
 const { requiredField } = require('../shared/fieldValidation');
-const { createDishObject } = require('../models/actions')
-const Dish = require('../models/dish');
+const { createDrinkObject } = require('../models/actions')
+const Drink = require('../models/drink');
 
 /**
- * Get all dishes
+ * Get all drinks
  * @param {*} req 
  * @param {*} res 
  */
-const getDishes = (req, res) => {
+const getDrinks = (req, res) => {
     const query = req.query
-    const dish = query.hasOwnProperty('dish') ? query.dish : null
+    const drink = query.hasOwnProperty('drink') ? query.drink : null
     const category = query.hasOwnProperty('category') ? query.category : null
     let parameters = {}
 
-    if(dish)
-        parameters.nickname = new RegExp(dish, "i")
+    if(drink)
+        parameters.nickname = new RegExp(drink, "i")
 
     if(category)
         parameters["category.nickname"] = category
 
-    Dish.find(parameters)
-        .exec((err, dishes) => {
+    Drink.find(parameters)
+        .exec((err, drinks) => {
             if(err)
                 return res.status(400).json({ ok: false, err });
 
             res.json({
                 ok: true,
-                dishes,
-                count: dishes.length
+                drinks,
+                count: drinks.length
             })
 
         })
 }
 
 /**
- * Create dish
+ * Create drink
  * @param {*} req 
  * @param {*} res 
  */
-const createDish = (req, res) => {
+const createDrink = (req, res) => {
     const body = req.body;
 
     /** Validate if the name field exists in the submitted body */
@@ -62,35 +62,35 @@ const createDish = (req, res) => {
     if(!validation.ok)
         return res.status(400).json(validation)
 
-    /** Search dish in database */
-    Dish.findOne({ name: body.name }, (err, dishDB) => {
+    /** Search drink in database */
+    Drink.findOne({ name: body.name }, (err, drinkDB) => {
         if(err)
             return res.status(500).json({ ok: false, err })
 
-        if(dishDB){
-            return res.status(400).json({ ok: false, message: 'registered_dish' })
+        if(drinkDB){
+            return res.status(400).json({ ok: false, message: 'registered_drink' })
         }
 
-        /** Create dish */
-        const newDish = createDishObject(body);
+        /** Create drink */
+        const newDrink = createDrinkObject(body);
 
-        /** Save dish into database */
-        newDish.save((err, dishDB) => {
+        /** Save drink into database */
+        newDrink.save((err, drinkDB) => {
             if(err)
                 return res.status(400).json({ ok: false, err })
     
-            /** Return dish data */
-            res.json({ ok: true, dish: dishDB })
+            /** Return drink data */
+            res.json({ ok: true, drink: drinkDB })
         })
     })
 }
 
 /**
- * Get dish by id
+ * Get drink by id
  * @param {*} req 
  * @param {*} res 
  */
-const getDishById = (req, res) => {
+const getDrinkById = (req, res) => {
     const objectIdRegexp = new RegExp("^[0-9a-fA-F]{24}$");
     const id = req.params.id
 
@@ -98,29 +98,29 @@ const getDishById = (req, res) => {
     const isObjectId = objectIdRegexp.test(id)
     const query = isObjectId ? { _id: id } : { nickname: id }
 
-    Dish.findOne(query)
-        .exec((err, dish) => {
+    Drink.findOne(query)
+        .exec((err, drink) => {
             if(err)
                 return res.status(400).json({ ok: false, err });
 
-            if(!dish)
-                return res.status(404).json({ ok: false, message: 'dish_not_found' });
+            if(!drink)
+                return res.status(404).json({ ok: false, message: 'drink_not_found' });
 
-            if(dish.status === 'INACTIVE')
-                return res.status(404).json({ ok: false, message: 'dish_not_found' });
+            if(drink.status === 'INACTIVE')
+                return res.status(404).json({ ok: false, message: 'drink_not_found' });
 
-            res.json({ ok: true, dish })
+            res.json({ ok: true, drink })
         })
 }
 
 /**
- * Update dish
+ * Update drink
  * @param {*} req 
  * @param {*} res 
  */
-const updateDish = (req, res) => {
+const updateDrink = (req, res) => {
     const id = req.params.id
-    let body = _.pick(req.body, ['name', 'status', 'category', 'price', 'description'])
+    let body = _.pick(req.body, ['name', 'status', 'category', 'price', 'description', 'specifications'])
 
     if(body.name){
         const nameNoAccents = body.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
@@ -128,29 +128,29 @@ const updateDish = (req, res) => {
         body.nickname = nickname
     }
 
-    Dish.findByIdAndUpdate(id, body, {
+    Drink.findByIdAndUpdate(id, body, {
         new: true,
         runValidators: true
-    }, (err, dish) => {
+    }, (err, drink) => {
         if(err)
             return res.status(400).json({ ok: false, err })
 
-        if(!dish){
+        if(!drink){
             return res.status(400).json({
                 ok: false,
                 err: {
-                    message: 'dish_not_found'
+                    message: 'drink_not_found'
                 }
             })
         }
         
-        res.json({ ok: true, dish })
+        res.json({ ok: true, drink })
     })
 }
 
 module.exports = {
-    getDishes,
-    createDish,
-    getDishById,
-    updateDish
+    getDrinks,
+    createDrink,
+    getDrinkById,
+    updateDrink
 }

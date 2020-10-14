@@ -6,7 +6,7 @@ let validStatus = {
     message: 'invalid_status'
 }
 let Schema = mongoose.Schema;
-let dishSchema = new Schema({
+let drinkSchema = new Schema({
     name: {
         type: String,
         required: [true, 'name_required']
@@ -48,25 +48,20 @@ let dishSchema = new Schema({
         type: String,
         required: [true, 'description_required']
     },
-    extra_ingredients: {
-        name: {
-            type: String
-        },
-        quantity: {
-            type: Number
-        }
+    specifications: {
+        type: String
     }
 })
 
-dishSchema.methods.toJSON = function() {
-    let dish = this;
-    let dishObject = dish.toObject();
+drinkSchema.methods.toJSON = function() {
+    let drink = this;
+    let drinkObject = drink.toObject();
 
-    return dishObject;
+    return drinkObject;
 }
 
-dishSchema.plugin(uniqueValidator, {
+drinkSchema.plugin(uniqueValidator, {
     message: '{PATH} must be unique'
 })
 
-module.exports = mongoose.model('Dish', dishSchema);
+module.exports = mongoose.model('Drink', drinkSchema);
