@@ -25,6 +25,28 @@ let verifyToken = ( req, res, next ) => {
             })
         }
 
+        if(req.body.hasOwnProperty('ownerId')) {
+            if(decoded.user._id !== req.body.ownerId){
+                return res.status(401).json({
+                    ok: false,
+                    err: {
+                        message: 'not_authorized'
+                    }
+                })
+            }
+        }
+
+        if(req.params.hasOwnProperty('ownerId')) {
+            if(decoded.user._id !== req.params.ownerId){
+                return res.status(401).json({
+                    ok: false,
+                    err: {
+                        message: 'not_authorized'
+                    }
+                })
+            }
+        }
+
         req.user = decoded.user
         next()
     })

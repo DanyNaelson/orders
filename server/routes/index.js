@@ -13,6 +13,10 @@ const {
     getDrinkById,
     updateDrink
 } = require('../controllers/drink');
+const {
+    createOrder,
+    getOrdersByUser
+} = require('../controllers/order');
 
 /**
  * Endpoint: API Dishes
@@ -60,5 +64,15 @@ app.get(process.env.BASE_URL + '/drink/:id', getDrinkById)
  * Endpoint: Update drink
  */
 app.put(process.env.BASE_URL + '/drink/:id', [verifyToken], updateDrink)
+
+/**
+ * Endpoint: Save favorite drinks and favorite dishes
+ */
+app.post(process.env.BASE_URL + '/order', [verifyToken], createOrder)
+
+/**
+ * Endpoint: Get orders by user
+ */
+app.get(process.env.BASE_URL + '/orders/user/:ownerId', [verifyToken], getOrdersByUser)
 
 module.exports = app;

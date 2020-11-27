@@ -1,5 +1,6 @@
 const Dish = require('./dish');
 const Drink = require('./drink');
+const Order = require('./order');
 
 const createDishObject = (body) => {
     const nameNoAccents = body.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
@@ -49,7 +50,22 @@ const createDrinkObject = (body) => {
     return newDrink
 }
 
+const createOrderObject = (body, sequence) => {
+    const { ownerId, orderItems } = body
+
+    const newOrder = new Order({
+        orderNum: sequence,
+        status: "ORDERED",
+        total: orderItems.reduce((a, b) => a + (b["total"] || 0), 0),
+        ownerId,
+        orderItems
+    })
+
+    return newOrder
+}
+
 module.exports = {
     createDishObject,
-    createDrinkObject
+    createDrinkObject,
+    createOrderObject
 }
